@@ -56,7 +56,7 @@ CMFCApplication1Dlg::CMFCApplication1Dlg(CWnd* pParent /*=NULL*/)
 void CMFCApplication1Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_MFCACTIVEXCONTROCTRL1, m_actext);
+	//DDX_Control(pDX, IDC_MFCACTIVEXCONTROCTRL1, m_actext);
 	//DDX_Control(pDX, IDC_NKCALLCTRLCTRL1, m_nkc);
 }
 
@@ -66,6 +66,7 @@ BEGIN_MESSAGE_MAP(CMFCApplication1Dlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFCApplication1Dlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMFCApplication1Dlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CMFCApplication1Dlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -166,12 +167,10 @@ void CMFCApplication1Dlg::OnBnClickedButton1()
 	int i = m_actext.ac_add(1, 2);
 	//i = 100;
 }
-#import "C:/gyp/codetest/MFCActiveXControl1/Debug/MFCActiveXControl1.ocx" \
-	named_guids
-using namespace MFCActiveXControl1Lib;
-#import "C:/Users/gyp/Desktop/NKcallctrl4.1.3.2/NKcallctrl4.1.3.2/NkCallCtrl.ocx" \
-	named_guids
-
+// #import "C:/gyp/code/github/codetest/trunk/MFCActiveXControl1/Debug/MFCActiveXControl1.ocx" \
+// 	named_guids
+// using namespace MFCActiveXControl1Lib;
+// 
 
 
 #include "ctest1.h"
@@ -242,77 +241,58 @@ void CMFCApplication1Dlg::OnBnClickedButton2()
 		AfxMessageBox(e.Description());
 	}
 #endif
-
-// 	try{
-// 		CoInitialize(NULL);
-// 		IClassFactory *pClf = NULL;
-// 		//::CLSIDFromProgID(pwszProgID, &clsid);
-// 		::CoGetClassObject(clsid, CLSCTX_INPROC_SERVER, NULL, IID_IClassFactory, (void**)&pClf);
-// 		_DMFCActiveXControl1* pDataSa = NULL;
-// 		pClf->CreateInstance(NULL, __uuidof(_DMFCActiveXControl1), (void**)&pDataSa);
-// 		int i = pDataSa->ac_add(1, 2);
-// 
-// 		//pDataSa->Create((long)this, cPoint.x, cPoint.y);
-// 		pDataSa->Release();
-// 		CoUninitialize();
-// 	}
-// 	catch (_com_error e)
-// 	{
-// 		AfxMessageBox(e.Description());
-// 	}
 }
 
 bool CMFCApplication1Dlg::test1()
 {
-	BOOL bSucc = false;
-	TCHAR szMsg[1024] = { 0 };
-
-	try
-	{
-
-		// MyCtrl必须是全局的CWnd类对象
-		bSucc = m_actext1.CreateControl(
-			clsid,
-			(L"CollectData"),
-			0,
-			CRect(1, 1, 1, 1),
-			this,
-			IDC_MFCACTIVEXCONTROCTRL_TEXT1,
-			NULL, FALSE, NULL);
-	}
-	catch (CMemoryException* e)
-	{
-		e->GetErrorMessage(szMsg, 1024);
-		e->Delete();
-	}
-	catch (CFileException* e)
-	{
-		e->GetErrorMessage(szMsg, 1024);
-		e->Delete();
-	}
-	catch (CException* e)
-	{
-		e->GetErrorMessage(szMsg, 1024);
-		e->Delete();
-	}
-
-	if (!bSucc)
-	{
-		AfxMessageBox(_T("创建CollectData.ocx控件失败\r\n请检查CollectData.ocx控件是否安装并注册"));
-		return false;
-	}
-
-	IUnknown *pUnk = m_actext1.GetControlUnknown();
-	CComQIPtr<_DMFCActiveXControl1> spDCollectDataCtl(pUnk);
-	if (spDCollectDataCtl == NULL)
-	{
-		AfxMessageBox(_T("无法从CollectData.ocx中获取_DCollectData接口"));
-		return false;
-	}
-
-	int i = spDCollectDataCtl->ac_add(1, 1);
-	i = 10;
-	return true;
+// 	BOOL bSucc = false;
+// 	TCHAR szMsg[1024] = { 0 };
+// 
+// 	try
+// 	{
+// 		// MyCtrl必须是全局的CWnd类对象
+// 		bSucc = m_actext1.CreateControl(
+// 			clsid,
+// 			(L"CollectData"),
+// 			0,
+// 			CRect(1, 1, 1, 1),
+// 			this,
+// 			IDC_MFCACTIVEXCONTROCTRL_TEXT1,
+// 			NULL, FALSE, NULL);
+// 	}
+// 	catch (CMemoryException* e)
+// 	{
+// 		e->GetErrorMessage(szMsg, 1024);
+// 		e->Delete();
+// 	}
+// 	catch (CFileException* e)
+// 	{
+// 		e->GetErrorMessage(szMsg, 1024);
+// 		e->Delete();
+// 	}
+// 	catch (CException* e)
+// 	{
+// 		e->GetErrorMessage(szMsg, 1024);
+// 		e->Delete();
+// 	}
+// 
+// 	if (!bSucc)
+// 	{
+// 		AfxMessageBox(_T("创建CollectData.ocx控件失败\r\n请检查CollectData.ocx控件是否安装并注册"));
+// 		return false;
+// 	}
+// 
+// 	IUnknown *pUnk = m_actext1.GetControlUnknown();
+// 	CComQIPtr<_DMFCActiveXControl1> spDCollectDataCtl(pUnk);
+// 	if (spDCollectDataCtl == NULL)
+// 	{
+// 		AfxMessageBox(_T("无法从CollectData.ocx中获取_DCollectData接口"));
+// 		return false;
+// 	}
+// 
+// 	int i = spDCollectDataCtl->ac_add(1, 1);
+// 	i = 10;
+// 	return true;
 }
 BEGIN_EVENTSINK_MAP(CMFCApplication1Dlg, CDialogEx)
 	//ON_EVENT(CMFCApplication1Dlg, IDC_NKCALLCTRLCTRL1, 1, CMFCApplication1Dlg::OnSignInSuccessNkcallctrlctrl1, VTS_I2)
@@ -340,4 +320,15 @@ void CMFCApplication1Dlg::pCallBack1Mfcactivexcontroctrl1(long lfun)
 void CMFCApplication1Dlg::psssssMfcactivexcontroctrl1(long lsssss)
 {
 	// TODO:  在此处添加消息处理程序代码
+}
+
+#include "nkdlg.h"
+void CMFCApplication1Dlg::OnBnClickedButton3()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	nkdlg *m_test = new nkdlg();
+	BOOL ret = m_test->Create(IDD_NKDLG, this);
+	m_test->ShowWindow(0);
+	m_test->onloadocx();
+	m_test->on_add(7, 5);
 }

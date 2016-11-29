@@ -9,7 +9,7 @@
 using namespace ATL;
 #include <afxwin.h>
 // Ctest
-#import "C:/gyp/codetest/MFCActiveXControl1/Debug/MFCActiveXControl1.ocx" \
+#import "C:/gyp/code/github/codetest/trunk/MFCActiveXControl1/Debug/MFCActiveXControl1.ocx" \
 	named_guids
 using namespace MFCActiveXControl1Lib;
 class Ctest : 
@@ -49,7 +49,7 @@ public:
 		CAxDialogImpl<Ctest>::OnInitDialog(uMsg, wParam, lParam, bHandled);
 		bHandled = TRUE;
 		spDCollectDataCtl = nullptr;
-		onloadocx();
+		//onloadocx();
 		return 1;  // 使系统设置焦点
 	}
 

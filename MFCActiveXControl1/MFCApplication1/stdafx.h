@@ -54,6 +54,7 @@
 
 
 #define IDC_MFCACTIVEXCONTROCTRL_TEXT1             WM_USER + 1000
+#define IDC_MFCACTIVEXCONTROCTRL_NK                WM_USER + 1001
 #include <atlbase.h>
 #include <atlcom.h>
 #include <atlctl.h>

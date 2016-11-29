@@ -8,6 +8,7 @@
 #include <string>
 
 
+//f1d13f33-d072-4db9-85e4-970f73381116
 static CLSID const clsid
 = { 0xF1D13F33, 0xD072, 0x4DB9, { 0x85, 0xE4, 0x97, 0xF, 0x73, 0x38, 0x11, 0x16 } };
 
@@ -104,7 +105,10 @@ LRESULT ctest1::on_add(LONG lfun, LONG lfun1)
 	if (spDCollectDataCtl)
 	{
 		int i = spDCollectDataCtl->ac_add(3, 4);
-		i = 100;
+		std::wstring m_str;
+		m_str.append(L"ac_add返回值为 =");
+		m_str.append(std::to_wstring(i));
+		AfxMessageBox(m_str.c_str());
 	}
 	return false;
 }
@@ -112,7 +116,7 @@ LRESULT ctest1::on_add(LONG lfun, LONG lfun1)
 void ctest1::psssssMfcactivexcontroctrl1(LONG lfun)
 {
 	std::wstring m_str;
-	m_str.append(L"返回值为 =");
+	m_str.append(L"controctrl返回值为 =");
 	m_str.append(std::to_wstring(lfun));
 	AfxMessageBox(m_str.c_str());
 }

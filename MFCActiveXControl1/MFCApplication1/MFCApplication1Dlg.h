@@ -43,4 +43,5 @@ public:
 	void OnSignInSuccessNkcallctrlctrl1(short MediaType);
 	void pCallBack1Mfcactivexcontroctrl1(long lfun);
 	void psssssMfcactivexcontroctrl1(long lsssss);
+	afx_msg void OnBnClickedButton3();
 };
