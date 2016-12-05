@@ -67,6 +67,7 @@ BEGIN_MESSAGE_MAP(CMFCApplication1Dlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFCApplication1Dlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMFCApplication1Dlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMFCApplication1Dlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON4, &CMFCApplication1Dlg::OnBnClickedButton4)
 END_MESSAGE_MAP()
 
 
@@ -161,11 +162,13 @@ static CLSID const clsid
 = { 0xF1D13F33, 0xD072, 0x4DB9, { 0x85, 0xE4, 0x97, 0xF, 0x73, 0x38, 0x11, 0x16 } };
 
 const IID IID_DMFCActiveXControl1 = { 0x2B846E9F, 0xDF8A, 0x4D99, { 0xB8, 0x9D, 0xA5, 0x32, 0xA6, 0x27, 0x6C, 0xB7 } };
+
 void CMFCApplication1Dlg::OnBnClickedButton1()
 {
-	// TODO:  在此添加控件通知处理程序代码
-	int i = m_actext.ac_add(1, 2);
-	//i = 100;
+	m_test = new Ctest();
+	m_test->onloadocx();
+	m_test->on_add(7, 5);
+
 }
 // #import "C:/gyp/code/github/codetest/trunk/MFCActiveXControl1/Debug/MFCActiveXControl1.ocx" \
 // 	named_guids
@@ -185,6 +188,7 @@ void CMFCApplication1Dlg::OnBnClickedButton2()
 	m_test->onloadocx();
 	m_test->on_add(7, 5);
 
+	//DispEventAdvise()
 #if 0
 	try{
 
@@ -204,7 +208,7 @@ void CMFCApplication1Dlg::OnBnClickedButton2()
 			if (SUCCEEDED(hr))
 			{
 				long ReturnValue;
-				//IkuanATL->ac_add(8, 9);
+				IkuanATL->ac_add(8, 9);
 				//cout << "The answer for 8+9 is:" << ReturnValue << endl;
 				IkuanATL->Release();
 			}
@@ -292,7 +296,7 @@ bool CMFCApplication1Dlg::test1()
 // 
 // 	int i = spDCollectDataCtl->ac_add(1, 1);
 // 	i = 10;
-// 	return true;
+ 	return true;
 }
 BEGIN_EVENTSINK_MAP(CMFCApplication1Dlg, CDialogEx)
 	//ON_EVENT(CMFCApplication1Dlg, IDC_NKCALLCTRLCTRL1, 1, CMFCApplication1Dlg::OnSignInSuccessNkcallctrlctrl1, VTS_I2)
@@ -331,4 +335,15 @@ void CMFCApplication1Dlg::OnBnClickedButton3()
 	m_test->ShowWindow(0);
 	m_test->onloadocx();
 	m_test->on_add(7, 5);
+}
+
+
+void CMFCApplication1Dlg::OnBnClickedButton4()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	if (nullptr != m_test)
+	{
+		m_test->on_add(7, 5);
+	}
+	
 }

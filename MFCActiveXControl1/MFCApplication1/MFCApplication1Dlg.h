@@ -5,7 +5,7 @@
 #pragma once
 #include "mfcactivexcontroctrl1.h"
 #include "nkcallctrlctrl1.h"
-
+#include "test.h"
 
 // CMFCApplication1Dlg ¶Ô»°¿ò
 class CMFCApplication1Dlg : public CDialogEx
@@ -31,6 +31,8 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+private:
+	Ctest *m_test = nullptr;
 public:
 	bool test1();
 public:
@@ -44,4 +46,5 @@ public:
 	void pCallBack1Mfcactivexcontroctrl1(long lfun);
 	void psssssMfcactivexcontroctrl1(long lsssss);
 	afx_msg void OnBnClickedButton3();
+	afx_msg void OnBnClickedButton4();
 };

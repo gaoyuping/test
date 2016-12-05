@@ -40,6 +40,7 @@ library MFCActiveXControl1Lib
 			[id(1)] LONG pCallback();
 			[id(2)] void pCallBack1(LONG lfun);
 			[id(3)] void psssss(LONG lsssss);
+			[id(4)] void psssss1(LONG rlong, LONG llong);
 	};
 
 	//  CMFCActiveXControl1Ctrl 的类信息

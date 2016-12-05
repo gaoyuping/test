@@ -30,9 +30,9 @@ END_DISPATCH_MAP()
 // 事件映射
 
 BEGIN_EVENT_MAP(CMFCActiveXControl1Ctrl, COleControl)
-
 	EVENT_CUSTOM_ID("psssss", eventidpsssss, psssss, VTS_I4)
 	EVENT_CUSTOM_ID("pCallBack1", dispidpCallBack1, pCallBack1, VTS_I4)
+	EVENT_CUSTOM_ID("psssss1", eventidpsssss1, psssss1, VTS_I4 VTS_I4)
 END_EVENT_MAP()
 
 // 属性页
@@ -111,6 +111,12 @@ CMFCActiveXControl1Ctrl::~CMFCActiveXControl1Ctrl()
 	// TODO:  在此清理控件的实例数据。
 }
 
+BOOL CMFCActiveXControl1Ctrl::IsInvokeAllowed(DISPID)
+{
+	// You can check to see if COleControl::m_bInitialized is FALSE
+	// in your automation functions to limit access.
+	return TRUE;
+}
 // CMFCActiveXControl1Ctrl::OnDraw - 绘图函数
 
 void CMFCActiveXControl1Ctrl::OnDraw(
@@ -153,9 +159,10 @@ LONG CMFCActiveXControl1Ctrl::ac_add(LONG fun1, LONG fun2)
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	// TODO:  在此添加调度处理程序代码
-	pCallback();
-	pCallBack1(fun1 * fun2);
+// 	pCallback();
+// 	pCallBack1(fun1 * fun2);
 	psssss(fun1 * fun2);
+	psssss1(fun1 - fun2, fun2 - fun1);
 	return fun1 + fun2;
 }
 
