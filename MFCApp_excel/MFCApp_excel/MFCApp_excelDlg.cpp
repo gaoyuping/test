@@ -267,9 +267,9 @@ void CMFCApp_excelDlg::OnBnClickedButton1()
 			{
 				for (int ij = 2; ij < 100;  ij++)
 				{
-					if ("" == excl.getCellString(i + 1, ij))
+					if ("" == excl.getCellString(i + 2, ij))
 					{
-						excl.setCellString(i + 1, ij, m_b[j].c_str());
+						excl.setCellString(i + 2, ij, m_b[j].c_str());
 						break;
 					}
 				}
