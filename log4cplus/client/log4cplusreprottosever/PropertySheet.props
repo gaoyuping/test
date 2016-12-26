@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <log4cplu_include>C:\sdk\log\log4cplus\include</log4cplu_include>
+    <log4cplu_lib>C:\sdk\log\log4cplus\lib</log4cplu_lib>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IncludePath>$(log4cplu_include);$(IncludePath)</IncludePath>
+    <LibraryPath>$(log4cplu_lib);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="log4cplu_include">
+      <Value>$(log4cplu_include)</Value>
+    </BuildMacro>
+    <BuildMacro Include="log4cplu_lib">
+      <Value>$(log4cplu_lib)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
