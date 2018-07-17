@@ -5,6 +5,18 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QImage>
+enum LineType
+{
+    lineno,
+    lineTop,
+    lineButton,
+    lineLeft,
+    lineRight,
+    lineTopleft,
+    lineTopright,
+    lineButtonleft,
+    lineButtonright,
+};
 
 class MakeAvatarWidget : public QWidget
 {
@@ -21,6 +33,17 @@ public:
 protected:
     void paintEvent(QPaintEvent *event);
 private:
+    void mouseNo(QMouseEvent*);
+    void mouseTop(QMouseEvent*);
+    void mouseButton(QMouseEvent*);
+    void mouseLeft(QMouseEvent*);
+    void mouseRight(QMouseEvent*);
+    void mouseTopleft(QMouseEvent*);
+    void mouseTopright(QMouseEvent*);
+    void mouseButtonleft(QMouseEvent*);
+    void mouseButtonright(QMouseEvent*);
+    void makePic();
+private:
     //input
     int m_iAvatarHeight;
     int m_iAvatarWidth;
@@ -29,7 +52,9 @@ private:
     QPixmap m_ellipse;
     QImage result_image;
     bool m_bpress;
+    bool m_bchange;
     QPoint m_last;
+    LineType m_mousetype;
     int m_paintX;
     int m_paintY;
     int m_iheight;
