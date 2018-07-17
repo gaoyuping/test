@@ -316,4 +316,15 @@ void MakeAvatarWidget::makePic()
     //设置填充
     painter.setPen(QPen(QColor(255, 0, 0, 255)));
     painter.drawPath(path1);
+    QPen penline;
+    penline.setColor(QColor(255, 0, 0, 255));
+    penline.setStyle(Qt::DashLine);
+    painter.setPen(penline);
+    painter.drawLine(QPoint((m_iwidth - m_iAvatarWidth) / 2 - 1, (m_iheight - m_iAvatarHeight) / 2 + m_iAvatarHeight / 3), QPoint((m_iwidth + m_iAvatarWidth) / 2 - 1, (m_iheight - m_iAvatarHeight) / 2 + m_iAvatarHeight / 3));
+
+    painter.drawLine(QPoint((m_iwidth - m_iAvatarWidth) / 2 - 1, (m_iheight - m_iAvatarHeight) / 2 + m_iAvatarHeight *2 / 3), QPoint((m_iwidth + m_iAvatarWidth) / 2 - 1, (m_iheight - m_iAvatarHeight) / 2 + m_iAvatarHeight * 2 / 3));
+
+    painter.drawLine(QPoint((m_iwidth - m_iAvatarWidth) / 2 - 1 + m_iAvatarHeight / 3, (m_iheight - m_iAvatarHeight) / 2), QPoint((m_iwidth - m_iAvatarWidth) / 2 - 1 + m_iAvatarHeight / 3, (m_iheight + m_iAvatarHeight) / 2));
+
+    painter.drawLine(QPoint((m_iwidth - m_iAvatarWidth) / 2 - 1 + m_iAvatarHeight *2 / 3, (m_iheight - m_iAvatarHeight) / 2), QPoint((m_iwidth - m_iAvatarWidth) / 2 - 1 + m_iAvatarHeight *2 / 3, (m_iheight + m_iAvatarHeight) / 2));
 }
