@@ -1,4 +1,4 @@
-#ifndef QALLWIDGET_H
+ï»¿#ifndef QALLWIDGET_H
 #define QALLWIDGET_H
 
 #include <QWidget>
@@ -10,7 +10,7 @@ class QALLWidgetNotify : public QObject
 {
     Q_OBJECT
 
-    class CGarbo // ËüµÄÎ¨Ò»¹¤×÷¾ÍÊÇÔÚÎö¹¹º¯ÊıÖĞÉ¾³ıCSingletonµÄÊµÀı 
+    class CGarbo // å®ƒçš„å”¯ä¸€å·¥ä½œå°±æ˜¯åœ¨ææ„å‡½æ•°ä¸­åˆ é™¤CSingletonçš„å®ä¾‹ 
     {
     public:
         ~CGarbo()

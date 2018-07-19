@@ -1,4 +1,4 @@
-#include "downloadfile.h"
+﻿#include "downloadfile.h"
 #include <QtWidgets/QApplication>
 #include "QALLWidget.h"
 

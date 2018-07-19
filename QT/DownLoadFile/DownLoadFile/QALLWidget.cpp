@@ -1,4 +1,4 @@
-#include "QALLWidget.h"
+﻿#include "QALLWidget.h"
 #include <QMouseEvent>
 
 

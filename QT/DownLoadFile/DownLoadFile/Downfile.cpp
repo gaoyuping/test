@@ -1,4 +1,4 @@
-#include "Downfile.h"
+ï»¿#include "Downfile.h"
 #include "Downfile_include.h"
 
 
@@ -65,7 +65,7 @@ void Downfile::getDownLoadFile(QString url, QString loadpath, CallBackFunction c
     QList<DownloadManager*>::iterator iter = std::find_if(downloadManager.begin(), downloadManager.end(), FindByurl(url));
     if (iter != downloadManager.end())
     {
-        //µÈ´ýÏÖÓÐÏß³ÌÏÂÔØÍê³É
+        //ç­‰å¾…çŽ°æœ‰çº¿ç¨‹ä¸‹è½½å®Œæˆ
         structWaitdata *tmp = new structWaitdata;;
         tmp->url = url;
         tmp->loadpath = loadpath;
@@ -92,7 +92,7 @@ void Downfile::SLOT_downloadend()
         if (iter != m_waitdata.end())
         {
             structWaitdata* tmpCallback = *iter;
-            //µÈ´ýÏÖÓÐÏß³ÌÏÂÔØÍê³É
+            //ç­‰å¾…çŽ°æœ‰çº¿ç¨‹ä¸‹è½½å®Œæˆ
             if (tmpCallback->loadpath == endmanage->getPath())
             {
                 if (tmpCallback->callback)

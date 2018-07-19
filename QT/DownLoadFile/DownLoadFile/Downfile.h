@@ -1,4 +1,4 @@
-#ifndef DOWNFILE_H
+ï»¿#ifndef DOWNFILE_H
 #define DOWNFILE_H
 
 
@@ -17,7 +17,7 @@ class Downfile : public QObject
 {
     Q_OBJECT
     static Downfile *m_DownfileManager;
-    class CGarbo // ËüµÄÎ¨Ò»¹¤×÷¾ÍÊÇÔÚÎö¹¹º¯ÊıÖĞÉ¾³ıCSingletonµÄÊµÀı 
+    class CGarbo // å®ƒçš„å”¯ä¸€å·¥ä½œå°±æ˜¯åœ¨ææ„å‡½æ•°ä¸­åˆ é™¤CSingletonçš„å®ä¾‹ 
     {
     public:
         ~CGarbo()
@@ -34,9 +34,9 @@ public:
 
     void setBDownexisted(bool bDown);
 
-    //²»ĞèÒªheaderµÄ ÏÂÔØ
+    //ä¸éœ€è¦headerçš„ ä¸‹è½½
     void getDownLoadFile(QString url, QString loadpath, CallBackFunction callback = nullptr);
-    //²»ĞèÒªheaderµÄ ÏÂÔØ
+    //ä¸éœ€è¦headerçš„ ä¸‹è½½
     
 private slots:
     void SLOT_downloadend();

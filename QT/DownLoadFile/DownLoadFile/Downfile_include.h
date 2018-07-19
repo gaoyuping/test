@@ -1,4 +1,4 @@
-#ifndef DOWNFILE_INCLUDE_H
+﻿#ifndef DOWNFILE_INCLUDE_H
 #define DOWNFILE_INCLUDE_H
 #include <functional>
 #include <QJsonObject>

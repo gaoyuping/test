@@ -1,4 +1,4 @@
-#include "downloadfile.h"
+﻿#include "downloadfile.h"
 
 #include <QMovie>
 DownLoadFile::DownLoadFile(QWidget *parent)

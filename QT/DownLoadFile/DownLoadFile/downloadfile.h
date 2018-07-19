@@ -1,4 +1,4 @@
-#ifndef DOWNLOADFILE_H
+﻿#ifndef DOWNLOADFILE_H
 #define DOWNLOADFILE_H
 
 #include <QtWidgets/QMainWindow>
