@@ -1,14 +1,14 @@
 ﻿#include "Downfile.h"
 #include "Downfile_include.h"
 
-
 #include <QJsonDocument>
 #include <QFile>
 #include <QFileInfo>
 
 Downfile* Downfile::m_DownfileManager = nullptr;
 Downfile::CGarbo Downfile::Garbo;
-
+GNetworkAccessManager* GNetworkAccessManager::m_Manager = nullptr;
+GNetworkAccessManager::CGarbo_GNetworkAccessManager GNetworkAccessManager::Garbo;
 
 class FindByurl
 {
@@ -58,7 +58,7 @@ Downfile *Downfile::GetInstance()
     return m_DownfileManager;
 }
 
-void Downfile::getDownLoadFile(QString url, QString loadpath, CallBackFunction callback)
+void Downfile::asynDownLoadFile(QString url, QString loadpath, CallBackFunction callback)
 {
     static QMutex s_mutexdownloadManager;
     QMutexLocker locker(&s_mutexdownloadManager);
@@ -78,6 +78,12 @@ void Downfile::getDownLoadFile(QString url, QString loadpath, CallBackFunction c
     newmanager->SetUrl(url, loadpath, callback);
     connect(newmanager, SIGNAL(signal_downloadend()), this, SLOT(SLOT_downloadend()));
     downloadManager.push_back(newmanager);
+}
+
+void Downfile::synDownLoadFile(QString url, QString loadpath, bool &bsuccess, QString &strmsg, QJsonObject &JsonData)
+{
+    //DownloadManager  *newmanager = new DownloadManager();
+    //newmanager->SetsynUrl(url, loadpath, callback);
 }
 
 void Downfile::SLOT_downloadend()
@@ -134,8 +140,6 @@ void Downfile::SLOT_downloadend()
 //////////////////////////////////////////////////////////////////////////////////////////////
 DownloadManager::DownloadManager()
 {
-    connect(&manager, SIGNAL(finished(QNetworkReply*)),
-            SLOT(downloadFinished(QNetworkReply*)));
 }
 
 DownloadManager::~DownloadManager()
@@ -171,21 +175,55 @@ void DownloadManager::requestFinished(const int HttpStatusCode, QString data, QN
         m_callback(bRet, strRet, jsonObject);
     }
 }
-#include <algorithm>
-
-
 
 void DownloadManager::SetUrl(const QUrl &url, const QString & strpath, CallBackFunction callback)
 {
     QNetworkRequest request(url);
-    QNetworkReply *reply = manager.get(request);
+    QNetworkReply *reply = GNetworkAccessManager::GetInstance()->m_netmanager->get(request);
+    connect(reply, &QNetworkReply::finished, [&, reply](){
+        downloadFinished(reply);
+    });
+
     m_callback = callback;
 #ifndef QT_NO_SSL
     connect(reply, SIGNAL(sslErrors(QList<QSslError>)), SLOT(sslErrors(QList<QSslError>)));
 #endif
     m_url = url.toString();
     m_strpath = strpath;
-    currentDownloads.append(reply);
+    //currentDownloads.append(reply);
+}
+
+#include <QEventLoop>
+
+void DownloadManager::SetsynUrl(const QUrl &url, const QString & strpath, bool &bsuccess, QString &strmsg, QJsonObject &JsonData)
+{
+    QEventLoop temp_loop;
+    QNetworkRequest request(url);
+    QNetworkReply *reply = GNetworkAccessManager::GetInstance()->m_netmanager->get(request);
+#ifndef QT_NO_SSL
+    connect(reply, SIGNAL(sslErrors(QList<QSslError>)), SLOT(sslErrors(QList<QSslError>)));
+#endif
+    connect(reply, SIGNAL(finished()), &temp_loop, SLOT(quit()));
+
+
+    int istatuscode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    if (reply->error()) {
+        QString strerror;
+        QString strerrormsg = qPrintable(reply->errorString());
+        strerror.append("Download of ").append(url.toEncoded().constData()).append(" failed:").append(strerrormsg);
+        qInfo() << "[DownloadManager::downloadFinished] " << strerror;
+        qInfo() << "[DownloadManager::downloadFinished]http errror code" << istatuscode;
+        requestFinished(istatuscode, strerrormsg, reply);
+    }
+    else {
+        QString filename = saveFileName(url);
+        if (saveToDisk(filename, reply))
+            printf("Download of %s succeeded (saved to %s)\n",
+            url.toEncoded().constData(), qPrintable(filename));
+        requestFinished(istatuscode, qPrintable(filename), reply);
+    }
+
+    reply->deleteLater();
 }
 
 QString DownloadManager::saveFileName(const QUrl &url)
@@ -275,7 +313,6 @@ void DownloadManager::downloadFinished(QNetworkReply *reply)
         requestFinished(istatuscode, qPrintable(filename), reply);
     }
     
-    currentDownloads.removeAll(reply);
     reply->deleteLater();
     emit signal_downloadend();
 }

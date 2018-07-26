@@ -1,7 +1,7 @@
 ﻿#include "downloadfile.h"
 #include <QtWidgets/QApplication>
 #include "QALLWidget.h"
-
+#include "vld.h"//需要安装VLD
 class globalApp : public QApplication
 {
 public:
@@ -22,11 +22,10 @@ public:
 
 int main(int argc, char *argv[])
 {
-    int tmpFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
-    tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
-    _CrtSetDbgFlag(tmpFlag);
 
-    globalApp a(argc, argv);
+    QApplication a(argc, argv);
+//     QNetworkAccessManager networkaccessmanager;
+//     GNetworkAccessManager::GetInstance()->setNetworkAccessManager(networkaccessmanager);
     DownLoadFile w;
     w.show();
     return a.exec();

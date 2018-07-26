@@ -27,7 +27,7 @@ DownLoadFile::DownLoadFile(QWidget *parent)
 //             qInfo() << "strmsg = " << strmsg;
 //         }
 //     });
-//     Downfile::GetInstance()->getDownLoadFile(R"(http://file0203.daimg.com/2018/1807/DAimG_2018072235970747T4R2.rar)", R"(F:\D\2.rar)");
+     Downfile::GetInstance()->asynDownLoadFile(R"(http://tcard.systoon.com/dfs/group1/M00/0F/E5/wKgQrFtRXCKAL0mPAAEIPlXtZFg943.ico)", R"(F:\D\2.rar)");
 //     Downfile::GetInstance()->getDownLoadFile(R"(http://file0203.daimg.com/2018/1807/DAimG_2018072235970747T4R2.rar)", R"(F:\D\3.rar)");
 //     Downfile::GetInstance()->getDownLoadFile(R"(http://file0203.daimg.com/2018/1807/DAimG_2018072235970747T4R2.rar)", R"(F:\D\4.rar)");
 //     Downfile::GetInstance()->getDownLoadFile(R"(http://file0203.daimg.com/2018/1807/DAimG_2018072235970747T4R2.rar)", R"(F:\D\5.rar)");
@@ -69,7 +69,7 @@ void DownLoadFile::mousePressEvent(QMouseEvent *event)
 
     if (event->type() == QEvent::MouseButtonPress && event->button() == Qt::RightButton)
     {
-        tmp->move(mapFromGlobal(event->globalPos()));
+        tmp->move(event->globalPos());
         tmp->show();
     }
     __super::mousePressEvent(event);

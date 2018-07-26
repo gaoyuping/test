@@ -40,24 +40,7 @@ QALLWidget::QALLWidget(QWidget *parent)
 {
     setStyleSheet("background-color:rgb(255, 0, 255);");
     setFocusPolicy(Qt::StrongFocus);
-    connect(QALLWidgetNotify::GetInstance(), &QALLWidgetNotify::signalhide, [&](QObject *, QEvent * ev){
-        if (nullptr == this)
-        {
-            return;
-        }
-        if (isHidden())
-        {
-            return;
-        }
-        QMouseEvent *mev = dynamic_cast<QMouseEvent*>(ev);
-        if (mev &&ev->type() == QEvent::MouseButtonPress)
-        {
-            if (!(rect().contains(mapFromGlobal(mev->globalPos()))))
-            {
-                hide();
-            }
-        }
-    });
+    setWindowFlags(windowFlags() | Qt::Popup);
 }
 
 #include <QStyleOption>
@@ -74,7 +57,6 @@ QALLWidget::~QALLWidget()
 {
 
 }
-
 
 
 QALLWidget *QALLWidget::GetInstance()
