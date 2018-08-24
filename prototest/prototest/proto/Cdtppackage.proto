@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message CDTPPackage {
+    int32 command = 1;
+    int32 version = 2;
+    int32 algorithm = 3;
+    string sign = 4;
+    int32 dem = 5;
+    fixed64 timestamp = 6;
+    string pkgId = 7;
+    string from = 8;
+    string to = 9;
+    string senderPK = 10;
+    string receiverPK = 11;
+    bytes data = 12;
+}
