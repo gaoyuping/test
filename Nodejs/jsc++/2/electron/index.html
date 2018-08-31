@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<script>
+function SDK_callback(ret) {
+    console.log(ret)
+};
+
+function sleep(milliSeconds){
+    var startTime = new Date().getTime(); // get the current time
+    while (new Date().getTime() < startTime + milliSeconds); // hog cpu
+}
+var tmail = require('./testaddon')
+tmail.InitSDK();
+console.log(tmail.SetCallBackFun(SDK_callback));
+console.log(tmail.SetData(1,2));
+sleep(1000);
+</script>
+<head>
+    <meta charset="UTF-8">
+    <title>人脸识别测试程序</title>
+</head>
+<body>
+<button id="CAMOpen" name="CAMOpen">调用人脸识别DLL</button>
+</body>
+</html>
