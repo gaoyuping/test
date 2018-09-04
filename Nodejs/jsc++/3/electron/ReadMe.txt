@@ -1,5 +1,5 @@
 Rem 执行
-npm install
+npm install -g electron
 
 Rem  打包
 npm install -g electron-packager

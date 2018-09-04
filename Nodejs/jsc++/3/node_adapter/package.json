@@ -11,7 +11,7 @@
     "build:dev": "node-gyp build --debug",
     "build": "node-gyp build --debug",
     "elt": "node-gyp rebuild -target=2.0.8 -arch=x64 -dist-url=https://atom.io/download/atom-shell",
-	"rj": "node-gyp rebuild && node index.js",
+    "rj": "node-gyp rebuild && node index.js",
     "clean": "node-gyp clean"
   },
   "author": "",
