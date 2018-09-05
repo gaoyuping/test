@@ -3,9 +3,10 @@
 
 #include <windows.h>
 #include <process.h> 
-
+#include <string>
 using namespace std;
-typedef void(*callBackFun)(int icode, int strdata);
+
+typedef void(*callBackFun)(int icode, std::string strdata);
 //初始化
 int InitLibSdk();
 //反初始化

@@ -1,14 +1,14 @@
 #pragma once
 #include <string.h>
-
+#include <string>
 #include <windows.h>
 #include <process.h> 
 
 using namespace std;
-typedef void(*callBackFun)(int icode, int strdata);
-//³õÊ¼»¯
+typedef void(*callBackFun)(int icode, std::string strdata);
+//ï¿½ï¿½Ê¼ï¿½ï¿½
 int InitLibSdk();
-//·´³õÊ¼»¯
+//ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
 int UnitLibSdk();
 
 int SdkAdd(int a, int b);

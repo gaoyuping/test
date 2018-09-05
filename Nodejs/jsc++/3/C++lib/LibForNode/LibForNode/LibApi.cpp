@@ -25,10 +25,11 @@ static DWORD WINAPI TimerThread(LPVOID lpParameter)
                 SwitchToThread();
         }
         // 60毫秒自动调用函数
-        std::cout << ("ssssssssssssssss") << std::endl;
+        std::cout << ("TimerThread  ") << g_int << std::endl;
         if (g_callBackFun)
         {
-            g_callBackFun(g_int++, g_int++);
+            std::cout << ("TimerThread callback time  ") << g_int << std::endl;
+            g_callBackFun(g_int++, "g_int++");
         }
         
     }
@@ -53,14 +54,27 @@ int UnitLibSdk()
 
 int SdkAdd(int a, int b)
 {
-    if (g_callBackFun != nullptr)
+    try
     {
-        g_callBackFun(a+b, a*b);
+        std::cout << ("SdkAdd callback ") << g_int++ << std::endl;
+        if (g_callBackFun != nullptr)
+        {
+            std::cout << ("SdkAdd callback 1, ") << g_int++ << std::endl;
+            g_callBackFun(a + b, "a + b");
+            std::cout << ("SdkAdd callback 2, ") << g_int++ << std::endl;
+        }
+        return 1;
+        //return (a + b);
+        std::cout << ("SdkAdd callback 3, ") << g_int++ << std::endl;
     }
-    return a + b;
+    catch (const std::exception&)
+    {
+        return -1;
+    }
 }
 
 int setCallBackFun(callBackFun ptr)
 {
     g_callBackFun = ptr;
+    return 1;
 }
