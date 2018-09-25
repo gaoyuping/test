@@ -1,0 +1,23 @@
+
+<script>
+    var js_call_c = null;
+    function c_call_js(message) {
+        alert("c++ message =" + message);
+    };
+ function CapacityChart() {
+     alert("begin js call c++");
+     if (js_call_c)
+     {
+         js_call_c("js call c++");
+     }
+     else
+     {
+         alert("js_call_c is Invalid " + typeof (js_call_c));
+     }
+     
+     alert("end js call c++");
+ };
+</script>
+<input type="button" value="Click" onclick="CapacityChart();">
+
+
