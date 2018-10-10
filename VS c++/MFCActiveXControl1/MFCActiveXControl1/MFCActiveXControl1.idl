@@ -1,0 +1,62 @@
+// MFCActiveXControl1.idl : ActiveX 控件项目的类型库源。
+
+// 此文件将由 MIDL 编译器工具处理以
+// 产生类型库(MFCActiveXControl1.tlb)，该类型库将成为
+// MFCActiveXControl1.ocx.
+
+#include <olectl.h>
+#include <idispids.h>
+
+[ uuid(104B3123-52D3-4E77-9E1A-55F3629F951D), version(1.0),
+  control ]
+library MFCActiveXControl1Lib
+{
+	importlib(STDOLE_TLB);
+
+	//  CMFCActiveXControl1Ctrl 的主调度接口
+	[ 
+		uuid(2B846E9F-DF8A-4D99-B89D-A532A6276CB7)
+	]
+	dispinterface _DMFCActiveXControl1
+	{
+		properties:
+		methods:
+			[id(1)] LONG ac_add(LONG fun1, LONG fun2);
+			[id(2)] void setCallBack(IUnknown* pCallBack);
+			[id(3)] void pCallBack1(LONG ssss);
+	};
+
+	//  CMFCActiveXControl1Ctrl 的事件调度接口
+
+	[ 
+		uuid(8BB1B5A6-FE1B-4234-8E8A-5B694570936D)	
+	]
+	dispinterface _DMFCActiveXControl1Events
+	{
+		properties:
+			//  事件接口没有任何属性
+
+		methods:
+			[id(1)] LONG pCallback();
+			[id(2)] void pCallBack1(LONG lfun);
+			[id(3)] void psssss(LONG lsssss);
+			[id(4)] void psssss1(LONG rlong, LONG llong);
+	};
+
+	//  CMFCActiveXControl1Ctrl 的类信息
+	[
+		uuid(F1D13F33-D072-4DB9-85E4-970F73381116)
+	]
+	coclass MFCActiveXControl1
+	{
+		[default] dispinterface _DMFCActiveXControl1;
+		[default, source] dispinterface _DMFCActiveXControl1Events;
+	};
+
+};
+
+// interface ICallBack : IUnknown {
+// 	[id(1), helpstring("回调接口,响应鼠标按 下")] HRESULT FireLButtonDown([in] LONG x, LONG y);
+// 	[id(2), helpstring("回调接口,响应鼠标移 动")] HRESULT FireMouseMove([in] LONG x, LONG y);
+//	[id(3), helpstring("回调接口,响应鼠标按 下")] HRESULT FireLButtonUp([in] LONG x, LONG y);
+//};

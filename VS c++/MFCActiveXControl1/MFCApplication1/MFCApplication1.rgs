@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		'%APPID%' = s 'MFCApplication1'
+				'MFCApplication1.EXE'
+				{
+			val AppID = s '%APPID%'
+		}
+	}
+}
