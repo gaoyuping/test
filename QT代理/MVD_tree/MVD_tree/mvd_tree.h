@@ -11,7 +11,8 @@ class MVD_tree : public QMainWindow
 public:
     MVD_tree(QWidget *parent = 0);
     ~MVD_tree();
-
+public slots:
+    void slot_doubleClicked(const QModelIndex &);
 private:
     Ui::MVD_treeClass ui;
 };

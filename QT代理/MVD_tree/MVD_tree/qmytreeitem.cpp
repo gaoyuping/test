@@ -1,9 +1,8 @@
 #include "qmytreeitem.h"
 
-QMyTreeItem::QMyTreeItem(const QVariant data, QMyTreeItem * parenItem)
-:_data(data), _parentItem(parenItem)
+QMyTreeItem::QMyTreeItem(const QVariant data, QMyTreeItem * parenItem, QPushButton* btnptr)
+    :_data(data), _parentItem(parenItem), m_btn(btnptr)
 {
-
 }
 
 QMyTreeItem::~QMyTreeItem()
