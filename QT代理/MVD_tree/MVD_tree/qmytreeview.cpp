@@ -1,15 +1,22 @@
 #include "qmytreeview.h"
-
+#include "qmytreeitemmodel.h"
 QMyTreeView::QMyTreeView(QWidget *parent)
     : QTreeView(parent)
 {
-
 }
 
 QMyTreeView::~QMyTreeView()
 {
 
 }
+
+void QMyTreeView::paintEvent(QPaintEvent *event)
+{
+    QMyTreeItemModel * ptr = (QMyTreeItemModel*)model();
+    ptr->hidebtn();
+    __super::paintEvent(event);
+}
+
 void QMyTreeView::mouseReleaseEvent(QMouseEvent *event)
 {
     __super::mouseReleaseEvent(event);

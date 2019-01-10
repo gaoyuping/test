@@ -29,5 +29,6 @@ void QMyTreeDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (tmp && tmp->getbtn())
     {
         tmp->getbtn()->move(rect.topRight());
+        tmp->getbtn()->show();
     }
 }

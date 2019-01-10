@@ -1,16 +1,24 @@
 #include "qmytreeitemmodel.h"
 #include <QDebug>
+
 QMyTreeItemModel::QMyTreeItemModel(QMyTreeItem * rootItem, QObject *parent)
 : QAbstractItemModel(parent), _rootItem(rootItem)
 {
-
 }
 
 QMyTreeItemModel::~QMyTreeItemModel()
 {
 
 }
+void QMyTreeItemModel::hidebtn()
+{
+    for (int i = 0; i < _rootItem->childCount(); i++)
+    {
+        QMyTreeItem *itemptr = (QMyTreeItem *)_rootItem->child(i);
+        itemptr->hidebtn();
+    }
 
+}
 QVariant QMyTreeItemModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
@@ -69,6 +77,7 @@ QModelIndex QMyTreeItemModel::index(int row, int column, const QModelIndex &pare
         return QModelIndex();
     }
 }
+
 QModelIndex QMyTreeItemModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid())

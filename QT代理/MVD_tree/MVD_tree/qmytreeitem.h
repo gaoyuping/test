@@ -22,7 +22,7 @@ public:
     QMyTreeItem *parentItem() const;
     QVariant data() const;
 
-
+    void hidebtn();
 private:
     QList<QMyTreeItem*> _childItems;
     QVariant _data;

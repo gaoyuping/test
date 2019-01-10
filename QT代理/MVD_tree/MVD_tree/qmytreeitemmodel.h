@@ -11,7 +11,7 @@ class QMyTreeItemModel : public QAbstractItemModel
 public:
     QMyTreeItemModel(QMyTreeItem * rootItem , QObject *parent);
     ~QMyTreeItemModel();
-
+    void hidebtn();
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
     Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
     QVariant headerData(int section, Qt::Orientation orientation,
@@ -21,10 +21,8 @@ public:
     QModelIndex parent(const QModelIndex &index) const Q_DECL_OVERRIDE;
     int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
-
 private:
-    QMyTreeItem * _rootItem;
-    
+    QMyTreeItem *_rootItem;
 };
 
 #endif // QMYTREEITEMMODEL_H

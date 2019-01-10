@@ -40,7 +40,6 @@ int QMyTreeItem::childCount()
     return _childItems.count();
 }
 
-
 QMyTreeItem *QMyTreeItem::child(int row)
 {
     return _childItems.value(row);
@@ -54,4 +53,12 @@ QMyTreeItem *QMyTreeItem::parentItem() const
 QVariant QMyTreeItem::data() const
 {
     return _data;
+}
+
+void QMyTreeItem::hidebtn()
+{
+    if (m_btn)
+    {
+        m_btn->hide();
+    }
 }
