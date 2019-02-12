@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/hyawsmap">
+        <file>Resources/china.mif</file>
+    </qresource>
+</RCC>
