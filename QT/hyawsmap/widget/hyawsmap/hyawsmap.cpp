@@ -46,12 +46,20 @@ hyawsmap::hyawsmap(QWidget *parent)
         PosToPoint();
     });
     connect(m_btnsub10, &QPushButton::released, [&](){
-        m_size-=10;
+        m_size /=2;
+        if (m_size < 10)
+        {
+            m_size = 10;
+        }
         m_update = true;
         PosToPoint();
     });
     connect(m_btnadd10, &QPushButton::released, [&](){
-        m_size+=10;
+        m_size *= 2;
+        if (m_size > 2000)
+        {
+            m_size = 2000;
+        }
         m_update = true;
         PosToPoint();
     });
@@ -101,14 +109,15 @@ void hyawsmap::readdata()
                 tmpdata.clear();
                 //break;
             }
-//             int icount = atoi(str.mid(6, str.length()).toStdString().c_str());
-//             if (icount > 0)
-//             {
-//                 tmpdata.resize(icount);
-//             }
         }
-        if (str.indexOf("line") == 0)
+        else if (str.indexOf("line") == 0)
         {
+            if (tmpdata.size() > 0)
+            {
+                m_data1.push_back(tmpdata);
+                tmpdata.clear();
+                //break;
+            }
             continue;
         }
         else if (str.length() > 0 && str[0] == ' ')
@@ -252,11 +261,11 @@ bool hyawsmap::eventFilter(QObject *watched, QEvent *event)
         QWheelEvent * whellevent = (QWheelEvent *)event;
         if (whellevent->delta() > 0)
         {
-            m_btnadd->click();
+            m_btnadd10->click();
         }
         else
         {
-            m_btnsub->click();
+            m_btnsub10->click();
         }
         break;
     }
