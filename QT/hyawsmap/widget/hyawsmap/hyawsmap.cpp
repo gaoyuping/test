@@ -63,7 +63,7 @@ hyawsmap::hyawsmap(QWidget *parent)
     PosToPoint();
     m_beginx = 0;
     m_beginy = 0;
-    showgraphicsview();
+    //showgraphicsview();
 }
 
 QColor hyawsmap::getcolorByxy(int ix, int iy)
@@ -74,6 +74,8 @@ QColor hyawsmap::getcolorByxy(int ix, int iy)
     }
     return QColor(255, 255, 255);
 }
+#include <iostream>
+#include <fstream>
 
 void hyawsmap::readdata()
 {
@@ -86,11 +88,12 @@ void hyawsmap::readdata()
     }
     int i = 0;
     std::vector<QPointF> tmpdata;
-    
+    //std::vector<std::vector<QPointF*>> m_data111;
+    microClock_type begintime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
     while (!mapfile.atEnd()) {
         QByteArray line = mapfile.readLine();
         QString str(line);
-        if (str.indexOf("pline") == 0 || str.indexOf("PLINE") == 0 || str.indexOf("line") == 0)
+        if (str.indexOf("pline") == 0 || str.indexOf("PLINE") == 0)
         {
             if (tmpdata.size() > 0)
             {
@@ -98,6 +101,15 @@ void hyawsmap::readdata()
                 tmpdata.clear();
                 //break;
             }
+//             int icount = atoi(str.mid(6, str.length()).toStdString().c_str());
+//             if (icount > 0)
+//             {
+//                 tmpdata.resize(icount);
+//             }
+        }
+        if (str.indexOf("line") == 0)
+        {
+            continue;
         }
         else if (str.length() > 0 && str[0] == ' ')
         {
@@ -113,6 +125,8 @@ void hyawsmap::readdata()
         }
     }
     i = 0;
+    microClock_type endtime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
+    qDebug() << "PosToPoint " << endtime.time_since_epoch().count() - begintime.time_since_epoch().count();
 }
 
 void hyawsmap::PosToPoint()
@@ -233,6 +247,19 @@ bool hyawsmap::eventFilter(QObject *watched, QEvent *event)
             isDrag = false;
         }
         break;
+    case QEvent::Wheel:
+    {
+        QWheelEvent * whellevent = (QWheelEvent *)event;
+        if (whellevent->delta() > 0)
+        {
+            m_btnadd->click();
+        }
+        else
+        {
+            m_btnsub->click();
+        }
+        break;
+    }
     default:
         //qDebug() << mevent->type();
         break;
@@ -243,6 +270,7 @@ bool hyawsmap::eventFilter(QObject *watched, QEvent *event)
 
 void hyawsmap::makeMapToImage()
 {
+    return;
     QImage tmp(m_imaxx, m_imaxy, QImage::Format_ARGB32);
     tmp.fill(QColor(255, 255, 255));
     QPainter painterimage(&tmp);
@@ -352,7 +380,6 @@ void hyawsmap::paintEvent(QPaintEvent *event)
     opt.init(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-    return;
     
     if (m_imagedata != nullptr)
     {
