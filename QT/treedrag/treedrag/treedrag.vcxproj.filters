@@ -61,12 +61,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_MyTreeWidget.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_gmovewidget.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_gmovewidget.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="treedrag.h">
@@ -86,5 +80,13 @@
     <ClInclude Include="GeneratedFiles\ui_treedrag.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GeneratedFiles\Debug\treedrag.moc">
+      <Filter>Generated Files\Debug</Filter>
+    </None>
+    <None Include="GeneratedFiles\Release\treedrag.moc">
+      <Filter>Generated Files\Release</Filter>
+    </None>
   </ItemGroup>
 </Project>

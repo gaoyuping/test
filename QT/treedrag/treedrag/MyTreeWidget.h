@@ -4,6 +4,49 @@
 #include <QTreeWidgetItem>
 #include <QStack>
 
+class QTreeItemPrivate
+{
+    friend class QTreeItem;
+public:
+    QTreeItemPrivate() {};
+    ~QTreeItemPrivate() {};
+
+    std::string m_strid;
+    int m_ilevel;
+private:
+};
+
+class QTreeItem : public QTreeWidgetItem
+{
+public:
+    ~QTreeItem();
+    QTreeItem();
+
+
+    explicit QTreeItem(int type = Type);
+    explicit QTreeItem(const QStringList &strings, int type = Type);
+
+    QTreeItem(QTreeWidget *view, const QStringList &strings, int type = Type);
+    explicit QTreeItem(QTreeWidget *view, int type = Type);
+    QTreeItem(QTreeWidget *view, QTreeWidgetItem *after, int type = Type);
+
+    QTreeItem(QTreeWidgetItem *parent, const QStringList &strings, int type = Type);
+    explicit QTreeItem(QTreeWidgetItem *parent, int type = Type);
+    QTreeItem(QTreeWidgetItem *parent, QTreeWidgetItem *after, int type = Type);
+
+    QTreeItem(const QTreeWidgetItem &other);
+
+    std::string getStrId();
+    void  setStrId(std::string strid);
+
+    int getilevel();
+    void setilevel(int ilevel);
+    QTreeItem *QTreeItem::clone() const;
+private:
+    QTreeItemPrivate *d_ptr;
+    Q_DECLARE_PRIVATE(QTreeItem);
+};
+
 class TreeItemMimeData:public QMimeData  
 {  
     Q_OBJECT  
@@ -18,7 +61,7 @@ public:
   
     }  
   
-    void SetDragData(QString mimeType , QTreeWidgetItem *pItem)  
+    void SetDragData(QString mimeType , QTreeItem *pItem)
     {  
         m_format<<mimeType;  
         m_pDragItem = pItem;  
@@ -31,7 +74,7 @@ public:
         return m_format;  
     }  
   
-    const QTreeWidgetItem* DragItemData() const  
+    const QTreeItem* DragItemData() const
     {  
         return m_pDragItem;  
     }  
@@ -51,7 +94,7 @@ protected:
         }  
     }  
 private:  
-    const QTreeWidgetItem   *m_pDragItem;  
+    const QTreeItem   *m_pDragItem;
     QStringList              m_format;  
 };  
   
@@ -81,5 +124,6 @@ private:
     QDrag *m_movedrag;
     bool       m_CtrlPressed;  
     bool       m_drag;
+    QTreeItem *m_item;
   
 };  
