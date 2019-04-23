@@ -47,11 +47,6 @@ QTreeItem::QTreeItem(QTreeWidget *view, QTreeWidgetItem *after, int type)
 {
     d_ptr = new QTreeItemPrivate();
 }
-// QTreeItem::QTreeItem(QTreeWidgetItem *parent, int type = Type)
-//     : QTreeWidgetItem(parent, type)
-// {
-//     
-// }
 QTreeItem::QTreeItem(QTreeWidgetItem *parent, QTreeWidgetItem *after, int type)
     : QTreeWidgetItem(parent, after, type)
 {
@@ -137,6 +132,10 @@ MyTreeWidget::MyTreeWidget(QWidget *parent /*= NULL*/):QTreeWidget(parent)
     m_drag = true;
     m_movedrag = new QDrag(this);
     installEventFilter(this);
+    connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(slot_itemSelectionChanged()));
+    connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)), this, SLOT(slot_itemExpanded(QTreeWidgetItem *)));
+    connect(this, SIGNAL(itemCollapsed(QTreeWidgetItem *)), this, SLOT(slot_itemCollapsed(QTreeWidgetItem *)));
+
 }  
   
 MyTreeWidget::~MyTreeWidget()  
@@ -198,7 +197,27 @@ void MyTreeWidget::mousePressEvent(QMouseEvent *event)
     }  
     QTreeWidget::mousePressEvent(event);  
 }  
-  
+
+void MyTreeWidget::slot_itemSelectionChanged()
+{
+
+}
+
+void MyTreeWidget::slot_itemExpanded(QTreeWidgetItem *)
+{
+
+}
+
+void MyTreeWidget::slot_itemCollapsed(QTreeWidgetItem *)
+{
+
+}
+
+void MyTreeWidget::verticalScrollbarValueChanged(int value)
+{
+
+}
+
 void MyTreeWidget::mouseMoveEvent(QMouseEvent *event)  
 {  
     if (event->buttons() & Qt::LeftButton)  

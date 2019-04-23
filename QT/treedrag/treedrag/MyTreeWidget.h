@@ -107,6 +107,12 @@ public:
 public:
     bool eventFilter(QObject *watched, QEvent *event);
     void focusOutEvent(QFocusEvent *event);
+public slots:
+    void slot_itemSelectionChanged();
+    void slot_itemExpanded(QTreeWidgetItem *);
+    void slot_itemCollapsed(QTreeWidgetItem *);
+    protected slots:
+    void verticalScrollbarValueChanged(int value);
 protected:  
     void mouseMoveEvent(QMouseEvent *event);  
     void mousePressEvent(QMouseEvent *event);  

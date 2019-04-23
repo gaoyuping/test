@@ -72,7 +72,7 @@ public slots:
     void zoomIn(int level = 1);
     void zoomOut(int level = 1);
 signals:
-    void signal_scale(double i);
+    void signal_scale(int i);
 private slots:
     void setupMatrix();
     void togglePointerMode();

@@ -79,8 +79,8 @@ View::View(const QString &name, QWidget *parent)
     zoomOutIcon->setIconSize(iconSize);
     zoomSlider = new QSlider;
     zoomSlider->setMinimum(0);
-    zoomSlider->setMaximum(200);
-    zoomSlider->setValue(50);
+    zoomSlider->setMaximum(129);
+    zoomSlider->setValue(30);
     zoomSlider->setTickPosition(QSlider::TicksRight);
 
     // Zoom slider layout
@@ -154,7 +154,7 @@ QGraphicsView *View::view() const
 void View::setupMatrix()
 {
     int ii = zoomSlider->value();
-    qreal scale = qPow(qreal(2), (zoomSlider->value()-50) / qreal(100));
+    qreal scale = qPow(qreal(2), (zoomSlider->value()-30) / qreal(10));
 
     emit signal_scale(scale);
     QMatrix matrix;

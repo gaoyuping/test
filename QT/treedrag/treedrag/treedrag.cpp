@@ -30,13 +30,15 @@ QSize myQAbstractItemDelegate::sizeHint(const QStyleOptionViewItem &option, cons
 {
     return QSize(200, 20);
 };
-
+#include <QDialog>
 treedrag::treedrag(QWidget *parent)
     : QMainWindow(parent)
 {
 
     ui.setupUi(this);
-    MyTreeWidget * tmp = new MyTreeWidget(this);
+    QDialog dlg(this);
+
+    MyTreeWidget * tmp = new MyTreeWidget(&dlg);
     tmp->setItemDelegate(new myQAbstractItemDelegate());
     tmp->header()->hide();
     QTreeItem *imageItem2 = new QTreeItem(tmp, QStringList(QStringLiteral("Í¼Ïñ1")));
@@ -69,7 +71,10 @@ treedrag::treedrag(QWidget *parent)
         tmp->header()->hide();
         QTreeItem *imageItem2 = new QTreeItem(tmp, QStringList(QStringLiteral("Í¼Ïñ2")));
         tmp->expandAll();
-         tmp->move(220, 20);
-         tmp->resize(200, 200);
+        tmp->move(220, 20);
+        tmp->resize(200, 200);
     }
+
+    dlg.resize(800, 800);
+    dlg.exec();
 }

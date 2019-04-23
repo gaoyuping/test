@@ -11,14 +11,16 @@
 #include <QMouseEvent>
 #include "chipimage.h"
 //#pragma comment(linker, "/STACK:1073741824")
-#define ADD_SETP 5
+#define _SETP_ 100
+#include <qmath.h>
 typedef std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> microClock_type;
 hyawsmap::hyawsmap(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+    m_i = 0;
     m_tmp = nullptr;
-    m_step = 5;
+    m_step = 10;
     m_size = 15;
     m_update = false;
     m_imaxx = 0;
@@ -35,32 +37,52 @@ hyawsmap::hyawsmap(QWidget *parent)
     m_btnsub10->hide();
     m_btnadd->hide();
     m_btnadd10->hide();
+//     for (int i = -20; i < 180; i++)
+//     {
+//         qreal scale = qPow(qreal(2), i/10);
+//         qDebug() << "2^"<<i/10<<"="<< scale;
+//     }
+//     qDebug() << "-------------";
+    for (int i = 0; i < 100; i++)
+    {
+        double dl = i / qreal(10);
+        qreal scale = qPow(qreal(2), dl);
+        qDebug() << "2^" << dl << "=" << scale *10;
+    }
+//     return;
     connect(m_btnsub, &QPushButton::released, [&](){
         m_size--;
         m_update = true;
-        PosToPoint();
+        //PosToPoint();
     });
     connect(m_btnadd, &QPushButton::released, [&](){
         m_size++;
         m_update = true;
-        PosToPoint();
+        //PosToPoint();
     });
     connect(m_btnsub10, &QPushButton::released, [&](){
-        m_size-=10;
+        m_size /= 2;
+        if (m_size < 10)
+        {
+            m_size = 10;
+        }
         m_update = true;
-        PosToPoint();
+        //PosToPoint();
     });
     connect(m_btnadd10, &QPushButton::released, [&](){
-        m_size+=10;
+        m_size *= 2;
+        if (m_size > 2000)
+        {
+            m_size = 2000;
+        }
         m_update = true;
-        PosToPoint();
+        //PosToPoint();
     });
     float sss = 1.0;
     m_imagedata = nullptr;
     isDrag = false;
     installEventFilter(this);
     readdata();
-    PosToPoint();
     m_beginx = 0;
     m_beginy = 0;
     showgraphicsview();
@@ -74,10 +96,12 @@ QColor hyawsmap::getcolorByxy(int ix, int iy)
     }
     return QColor(255, 255, 255);
 }
-
+#include <QFileDialog>
 void hyawsmap::readdata()
 {
-    QFile mapfile(":/hyawsmap/Resources/china.mif");
+    QFileDialog dlg;
+    QString str = dlg.getOpenFileName();
+    QFile mapfile(str);
     if (!mapfile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         qDebug() << "Can't open the file!" << endl;
@@ -86,102 +110,182 @@ void hyawsmap::readdata()
     }
     int i = 0;
     std::vector<QPointF> tmpdata;
-    
+    //std::vector<std::vector<QPointF*>> m_data111;
+    microClock_type begintime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
+    QPointF topleft(121.282852, 40.043746);
     while (!mapfile.atEnd()) {
         QByteArray line = mapfile.readLine();
         QString str(line);
-        if (str.indexOf("pline") == 0 || str.indexOf("PLINE") == 0 || str.indexOf("line") == 0)
+        str = str.trimmed();
+        int iindex = str.indexOf("  ");
+        while (str.indexOf("  ") != -1)
         {
-            if (tmpdata.size() > 0)
-            {
-                m_data1.push_back(tmpdata);
-                tmpdata.clear();
-                //break;
-            }
+            str = str.replace("  ", " ");
         }
-        else if (str.length() > 0 && str[0] == ' ')
+        if (str.indexOf(' ') != -1)
         {
-            continue;
+            QStringList strlist = str.split(' ');
+            if (strlist.size() == 2)
+            {
+                QPointF sss(strlist[0].toFloat(), strlist[1].toFloat());
+                tmpdata.push_back(sss);
+            }
         }
         else
         {
-            QString strx = str.mid(0, str.indexOf(' '));
-            QString stry = str.mid(str.indexOf(' '), str.length());
-            double ix = strx.toFloat();
-            QPointF sss(strx.toFloat(), stry.toFloat());
-            tmpdata.push_back(sss);
+            if (tmpdata.size() > 0)
+            {
+                QPointF newaaaa = tmpdata[0];
+                if (!m_init)
+                {
+                    m_init = true;
+                    topleft = newaaaa;
+                }
+                bool bchang = false;
+                int ix = 0;
+                int iy = 0;
+                int ix1 = 0;
+                int iy1 = 0;
+                changerebegin:
+                for (int i = 1; i < tmpdata.size(); i++)
+                {
+                    QPoint  ret = CMInfoProject::PosToPoint(tmpdata[i], newaaaa, _SETP_);
+                    if (ret.x() < 0 || ret.y() < 0)
+                    {
+                        int iii = 0;
+                    }
+                    if (ret.x() <= ix && ret.x())
+                    {
+                        ix = ret.x();
+                        newaaaa.setX(tmpdata[i].x());
+                        bchang = true;
+                    }
+                    if (ret.y() <= iy && ret.y())
+                    {
+                        iy = ret.y();
+                        newaaaa.setY(tmpdata[i].y());
+                        bchang = true;
+                    }
+                    ret = CMInfoProject::PosToPoint(tmpdata[i], topleft, _SETP_);
+                    if (ret.x() <= ix1 && ret.x())
+                    {
+                        ix1 = ret.x();
+                        topleft.setX(tmpdata[i].x());
+                    }
+                    if (ret.y() <= iy1 && ret.y())
+                    {
+                        iy1 = ret.y();
+                        topleft.setY(tmpdata[i].y());
+                    }
+                }
+                if (bchang)
+                {
+                    bchang = false;
+                    goto changerebegin;
+                }
+
+                int imaxx = 0;
+                int imaxy = 0;
+                bool badd = true;
+                std::vector<QPoint> m_datadraw;
+                for (int i = 0; i < tmpdata.size(); i++)
+                {
+                    QPoint  ret = CMInfoProject::PosToPoint(tmpdata[i], newaaaa, _SETP_);
+                    badd = true;
+                    for (int i = 0; i < m_datadraw.size(); i++)
+                    {
+                        if (m_datadraw[i] == ret)
+                        {
+                            badd = false;
+                            break;
+                        }
+                    }
+                    if (!badd)
+                    {
+                        continue;
+                    }
+                    m_datadraw.push_back(ret);
+                    if (imaxx < ret.x())
+                    {
+                        imaxx = ret.x();
+                    }
+                    if (imaxy < ret.y())
+                    {
+                        imaxy = ret.y();
+                    }
+                }
+                if (imaxx <1 || imaxy < 1)
+                {
+                    imaxx = 0;
+                }
+                ST_XQ sttmp;
+                sttmp.m_topleftpoint = newaaaa;
+                sttmp.m_imaxx = imaxx;
+                sttmp.m_imaxy = imaxy;
+                sttmp.m_pointdata.swap(tmpdata);
+                m_data1.push_back(sttmp);
+                tmpdata.clear();
+                i++;
+                if (i > 1)
+                {
+                    //break;
+                }
+            }
         }
     }
+    mapfile.close();
     i = 0;
-}
-
-void hyawsmap::PosToPoint()
-{
-    QPointF aaaa(121.282852, 40.043746);
-    double x;
-    double y;
-    int ix=0;
-    int iy=0;
-    QPointF newaaaa;
-    microClock_type begintime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
     for (int i = 0; i < m_data1.size(); i++)
     {
-        std::vector<QPoint> tmpdata;
-        for (int j = 0; j < m_data1[i].size(); j++)
-        {
-            QPoint  ret = CMInfoProject::PosToPoint(m_data1[i][j], aaaa, m_size);
-            if (ret.x() < ix)
-            {
-                newaaaa.setX(m_data1[i][j].x());
-                ix = ret.x();
-            }
-            if (ret.y() < iy)
-            {
-                newaaaa.setY(m_data1[i][j].y());
-                iy = ret.y();
-            }
-        }
+        m_data1[i].m_pos = topleft;
     }
-    int imaxx = 0;
-    int imaxy = 0;
-    std::vector<std::vector<QPoint>> datadraw;
-    for (int i = 0; i < m_data1.size(); i ++)
-    {
-        std::vector<QPoint> tmpdata;
-        for (int j = 0; j < m_data1[i].size(); j++)
-        {
-            QPoint  ret = CMInfoProject::PosToPoint(m_data1[i][j], newaaaa, m_size);
-            tmpdata.push_back(ret);
-            if (ret.x() > imaxx)
-            {
-                imaxx = ret.x();
-            }
-            if (ret.y() > imaxy)
-            {
-                imaxy = ret.y();
-            }
-        }
-        if (tmpdata.size() > 0)
-        {
-            datadraw.push_back(tmpdata);
-        }
-    }
-    if (m_imaxx)
-    {
-        if (m_beginx != 0 && m_beginx != 0)
-        {
-            m_beginx = width() / 2 - double(width() / 2 - m_beginx) / m_imaxx * imaxx;
-            m_beginy = height() / 2 - double(height() / 2 - m_beginy) / m_imaxy * imaxy;
-        }
-    }
-    m_datadraw.swap(datadraw);
-    m_imaxy = imaxy;
-    m_imaxx = imaxx;
-    update();
     microClock_type endtime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
-    qDebug() << "PosToPoint " << endtime.time_since_epoch().count() - begintime.time_since_epoch().count();
-    makeMapToImage();
+    qDebug() << "readdata " << endtime.time_since_epoch().count() - begintime.time_since_epoch().count();
 }
+// 
+// void hyawsmap::PosToPoint()
+// {
+//     microClock_type begintime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
+//     int imaxx = 0;
+//     int imaxy = 0;
+//     std::vector<std::vector<QPoint>> datadraw;
+//     for (int i = 0; i < m_data1.size(); i ++)
+//     {
+//         std::vector<QPoint> tmpdata;
+//         for (int j = 0; j < m_data1[i].size(); j++)
+//         {
+//             QPoint  ret = CMInfoProject::PosToPoint(m_data1[i][j], m_topleft, m_size);
+//             tmpdata.push_back(ret);
+//             if (ret.x() > imaxx)
+//             {
+//                 imaxx = ret.x();
+//             }
+//             if (ret.y() > imaxy)
+//             {
+//                 imaxy = ret.y();
+//             }
+//         }
+//         if (tmpdata.size() > 0)
+//         {
+//             datadraw.push_back(tmpdata);
+//         }
+//     }
+//     if (m_imaxx)
+//     {
+//         if (m_beginx != 0 && m_beginx != 0)
+//         {
+//             m_beginx = width() / 2 - double(width() / 2 - m_beginx) / m_imaxx * imaxx;
+//             m_beginy = height() / 2 - double(height() / 2 - m_beginy) / m_imaxy * imaxy;
+//         }
+//     }
+//     m_datadraw.swap(datadraw);
+//     m_imaxy = imaxy;
+//     m_imaxx = imaxx;
+//     update();
+//     microClock_type endtime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
+//     qDebug() << "PosToPoint " << endtime.time_since_epoch().count() - begintime.time_since_epoch().count();
+//     makeMapToImage();
+// }
 
 
 void hyawsmap::makebufferdata()
@@ -267,34 +371,68 @@ void hyawsmap::makeMapToImage()
 
 void hyawsmap::showgraphicsview()
 {
-    makeiamge();
     View *view = new View("Graphicsview");
-    connect(view, SIGNAL(signal_scale(double)), this, SLOT(slot_scale(double)), Qt::DirectConnection);
+    connect(view, SIGNAL(signal_scale(int)), this, SLOT(slot_scale(int)));
     m_scene = new QGraphicsScene;
     view->view()->setScene(m_scene);
     ui.verticalLayout->addWidget(view);
-    int ix = 0;
-    int iy = 0;
-    int iiii = 0;
-    //Õý¸º200·¶Î§
-    for (int i = -100; i < 100; i++)
+
+    for (int i = 0; i < m_data1.size(); i++)
     {
-        for (int j = -100; j < 100; j++)
+        bool badd = true;
+        std::vector<QPoint> m_datadraw;
+        for (int j = 0; j < m_data1[i].m_pointdata.size(); j++)
         {
-            iiii++;
-            ix = i * ADD_SETP;
-            iy = j * ADD_SETP;
-            QGraphicsItem *item = new ChipImage(i, j, &m_tmp);
-            item->setPos(QPointF(ix, iy));
-            m_scene->addItem(item);
+            QPoint  ret = CMInfoProject::PosToPoint(m_data1[i].m_pointdata[j], m_data1[i].m_topleftpoint, _SETP_);
+            badd = true;
+            for (int ii = 0; ii < m_datadraw.size(); ii++)
+            {
+                if (m_datadraw[ii] == ret)
+                {
+                    badd = false;
+                    break;
+                }
+            }
+            if (!badd)
+            {
+                continue;
+            }
+            m_datadraw.push_back(ret);
         }
+        QPainterPath path;
+        path.moveTo(m_datadraw[0]);
+        for (int i = 1; i < m_datadraw.size(); i++)
+        {
+            path.lineTo(m_datadraw[i]);
+        }
+        QGraphicsPolygonItem* item = new QGraphicsPolygonItem;
+        item->setPolygon(path.toFillPolygon());
+        QPen pen;
+        pen.setWidth(1);
+        pen.setColor(QColor(100,255,100));
+        item->setPen(pen);
+        //item->setFlag(QGraphicsItem::ItemIsMovable, true);
+        //item->setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+        //QGraphicsItem *item = new ChipImage(m_data1[i].m_imaxx, m_data1[i].m_imaxy, m_data1[i].m_topleftpoint, m_data1[i].m_pos, m_data1[i].m_pointdata);
+        QPoint  ret = CMInfoProject::PosToPoint(m_data1[i].m_topleftpoint, m_data1[i].m_pos, _SETP_);
+        item->setPos(ret);
+        m_scene->addItem(item);
     }
-    iiii = 0;
+    return;
 }
 
 void hyawsmap::makeiamge()
 {
+    if (m_imaxx == 0)
+    {
+        return;
+    }
     QImage *tmp = new QImage(m_imaxx, m_imaxy, QImage::Format_ARGB32);
+    if (tmp->isNull())
+    {
+        return;
+    }
     tmp->fill(QColor(255, 255, 255));
     do
     {
@@ -310,6 +448,10 @@ void hyawsmap::makeiamge()
     } while (0);
 
     QImage *tmp1 = new QImage(200 * m_step, 200 * m_step, QImage::Format_ARGB32);
+    if (tmp1->isNull())
+    {
+        return;
+    }
     tmp1->fill(QColor(255, 255, 255));
     do
     {
@@ -323,27 +465,17 @@ void hyawsmap::makeiamge()
     m_tmp = tmp1;
 }
 
-void hyawsmap::slot_scale(double i)
+void hyawsmap::slot_scale(int i)
 {
-    if (m_step == 5)
+    return;
+    if (i != m_i)
     {
-        if (i >= 1.5)
-        {
-            m_step = 10;
-            m_size = 30;
-            PosToPoint();
-            makeiamge();
-        }
-    }
-    else if (m_step == 10)
-    {
-        if (i < 1.5)
-        {
-            m_step = 5;
-            m_size = 15;
-            PosToPoint();
-            makeiamge();
-        }
+        m_i = i;
+        m_step = qPow(qreal(2), m_i - 1);
+        m_step *= 10;
+        m_size = m_step;
+        //PosToPoint();
+        makeiamge();
     }
 }
 
@@ -353,111 +485,6 @@ void hyawsmap::paintEvent(QPaintEvent *event)
     opt.init(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-    return;
-    
-    if (m_imagedata != nullptr)
-    {
-        microClock_type begintime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
-        if (m_update == false && m_imagedata->width() >= width() && m_imagedata->height() >= height() && m_beginoldx == m_beginx && m_beginoldy == m_beginy)
-        {
-            p.drawImage(0, 0, *m_imagedata);
-            microClock_type endtime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
-            qDebug() << "repaintEvent " << endtime.time_since_epoch().count() - begintime.time_since_epoch().count();
-            return;
-        }
-        m_update = false;
-        QImage * tmp = new QImage(width(), height(), QImage::Format_ARGB32);
-        tmp->fill(QColor(255, 255, 255));
-        QPainter painterimage(tmp);
-        for (int i = 0; i < m_datadraw.size(); i++)
-        {
-            for (int j = 1; j < m_datadraw[i].size(); j++)
-            {
-                if (m_datadraw[i][j - 1].x() < m_beginx && m_beginx < 0)
-                {
-                    continue;
-                }
-                if (m_datadraw[i][j - 1].y() < m_beginy && m_beginy < 0)
-                {
-                    continue;
-                }
-                if (m_datadraw[i][j - 1].x() >(width() + m_beginx) && m_beginx  > 0)
-                {
-                    continue;
-                }
-
-                if (m_datadraw[i][j - 1].y() >(width() + m_beginy) && m_beginy > 0)
-                {
-                    continue;
-                }
-
-                if (m_datadraw[i][j - 1].x() > (width() - m_beginx) && m_beginx < 0)
-                {
-                    continue;
-                }
-
-                if (m_datadraw[i][j - 1].y() > (width() - m_beginy) && m_beginy < 0)
-                {
-                    continue;
-                }
-
-                painterimage.drawLine(m_datadraw[i][j - 1] + QPoint(m_beginx, m_beginy), m_datadraw[i][j] + QPoint(m_beginx, m_beginy));
-            }
-        }
-        m_beginoldx = m_beginx;
-        m_beginoldy = m_beginy;
-        delete m_imagedata;
-        m_imagedata = tmp;
-        p.drawImage(0, 0, *m_imagedata);
-        microClock_type endtime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
-        qDebug() << "redraw image paintEvent " << endtime.time_since_epoch().count() - begintime.time_since_epoch().count();
-        return;
-    }
-    else
-    {
-        QImage * tmp = new QImage(width(), height(), QImage::Format_ARGB32);
-        tmp->fill(QColor(255, 255, 255));
-        QPainter painterimage(tmp);
-        //painterimage.
-        for (int i = 0; i < m_datadraw.size(); i++)
-        {
-            for (int j = 1; j < m_datadraw[i].size(); j++)
-            {
-                if (m_datadraw[i][j - 1].x() < m_beginx && m_beginx < 0)
-                {
-                    continue;
-                }
-                if (m_datadraw[i][j - 1].y() < m_beginy && m_beginy < 0)
-                {
-                    continue;
-                }
-                if (m_datadraw[i][j - 1].x() >(width() + m_beginx) && m_beginx > 0)
-                {
-                    continue;
-                }
-
-                if (m_datadraw[i][j - 1].y() >(width() + m_beginy) && m_beginy > 0)
-                {
-                    continue;
-                }
-
-                if (m_datadraw[i][j - 1].x() > (width() - m_beginx) && m_beginx < 0)
-                {
-                    continue;
-                }
-
-                if (m_datadraw[i][j - 1].y() >(width() - m_beginy) && m_beginy < 0)
-                {
-                    continue;
-                }
-                painterimage.drawLine(m_datadraw[i][j - 1] + QPoint(m_beginx, m_beginy), m_datadraw[i][j] + QPoint(m_beginx, m_beginy));
-            }
-        }
-        m_beginoldx = m_beginx;
-        m_beginoldy = m_beginy;
-        m_imagedata = tmp;
-        p.drawImage(0, 0, *m_imagedata);
-    }
 }
 
 void hyawsmap::resizeEvent(QResizeEvent *event)

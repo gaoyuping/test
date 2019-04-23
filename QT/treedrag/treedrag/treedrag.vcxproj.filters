@@ -81,12 +81,4 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="GeneratedFiles\Debug\treedrag.moc">
-      <Filter>Generated Files\Debug</Filter>
-    </None>
-    <None Include="GeneratedFiles\Release\treedrag.moc">
-      <Filter>Generated Files\Release</Filter>
-    </None>
-  </ItemGroup>
 </Project>
