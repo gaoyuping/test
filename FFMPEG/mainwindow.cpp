@@ -28,14 +28,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //videoPath = QString::fromStdString(R"(D:\ffmpeg\a.mp4)");
-    videoPath = QString::fromStdString(R"(D:\ffmpeg\b.mp4)");
+    videoPath = QString::fromStdString(R"(D:\ffmpeg\a.mp4)");
+    //videoPath = QString::fromStdString(R"(D:\ffmpeg\b.mp4)");
     //videoPath = QString::fromStdString(R"(D:\ffmpeg\768x576.avi)");
     //videoPath = QString::fromStdString(R"(D:\ffmpeg\c.wmv)");
     
     mPlayer = new VideoPlayer(videoPath);
-    connect(mPlayer,SIGNAL(sig_GetOneFrame(QImage)),this,SLOT(slotGetOneFrame(QImage)));
-    connect(mPlayer, SIGNAL(sig_GetOneFramewh(int, int)), this, SLOT(slotGetOneFramewh(int, int)));
+    connect(mPlayer, SIGNAL(sig_GetOneFrame(QImage, double)), this, SLOT(slotGetOneFrame(QImage, double)));
+    connect(mPlayer, SIGNAL(sig_GetOneFramewh(int, int, double)), this, SLOT(slotGetOneFramewh(int, int, double)));
     
     connect(ui->Open_red,&QAction::triggered,this,&MainWindow::slotOpenRed);
     connect(ui->Close_Red,&QAction::triggered,this,&MainWindow::slotCloseRed);
@@ -60,7 +60,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
     if (mImage.size().width() <= 0) return;
 
     //将图像按比例缩放成和窗口一样大小
-    QImage img = mImage.scaled(this->size(),Qt::KeepAspectRatioByExpanding);
+    QImage img = mImage.scaled(this->size(), Qt::KeepAspectRatio);
 
     int x = this->width() - img.width();
     int y = this->height() - img.height();
@@ -69,19 +69,23 @@ void MainWindow::paintEvent(QPaintEvent *event)
     y /= 2;
 
     painter.drawImage(QPoint(x,y),img); //画出图像
+    painter.setPen(Qt::white);
+    painter.drawText(QRect(x + img.width() - 200, y + img.height() - 20, 200, 20), Qt::AlignRight, m_currenttime + QStringLiteral("/") + m_totalduration);
 
 }
 static int g_icount = 0;
-void MainWindow::slotGetOneFrame(QImage img)
+void MainWindow::slotGetOneFrame(QImage img, double currenttime)
 {
     mImage = img;
+    m_currenttime = QString::number(currenttime, 'f', 2);
     update(); //调用update将执行 paintEvent函数
     g_icount++;
-    qDebug() << "updata time :" << g_icount;
+    //qDebug() << "updata time :" << currenttime;
 }
 
-void MainWindow::slotGetOneFramewh(int iw, int ih)
+void MainWindow::slotGetOneFramewh(int iw, int ih, double totalduration)
 {
+    m_totalduration = QString::number(totalduration, 'f', 2);
     resize(iw, ih);
 }
 //小窗口显示

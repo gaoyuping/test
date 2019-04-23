@@ -34,6 +34,8 @@ private:
     LocalVideoPlayer *mLocalPlayer;
 
     QImage mImage;
+    QString m_currenttime;
+    QString m_totalduration;
     QImage R_mImage;
 
     QString url;
@@ -46,8 +48,8 @@ private:
     QString videoPath;
 
 private slots:
-    void slotGetOneFrame(QImage img);
-    void slotGetOneFramewh(int, int);
+void slotGetOneFrame(QImage img, double);
+    void slotGetOneFramewh(int, int, double);
     void slotGetRFrame(QImage img);
     bool slotOpenRed();
     bool slotCloseRed();

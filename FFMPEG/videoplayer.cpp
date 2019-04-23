@@ -91,7 +91,7 @@ void VideoPlayer::run()
     int iframe_rate = 60;
     ///查找解码器
     pCodecCtx = pFormatCtx->streams[videoStream]->codec;
-
+    double isteptime = av_q2d(pFormatCtx->streams[videoStream]->time_base);
     pCodecCtx->time_base.den > 0;
     if (pCodecCtx->time_base.den > 0)
     {
@@ -131,7 +131,7 @@ void VideoPlayer::run()
             pCodecCtx->width, pCodecCtx->height);
 
     int y_size = pCodecCtx->width * pCodecCtx->height;
-    emit sig_GetOneFramewh(pCodecCtx->width, pCodecCtx->height);
+    emit sig_GetOneFramewh(pCodecCtx->width, pCodecCtx->height, pFormatCtx->streams[videoStream]->duration  * isteptime);
     packet = (AVPacket *) malloc(sizeof(AVPacket)); //分配一个packet
     av_new_packet(packet, y_size); //分配packet的数据
 
@@ -149,7 +149,8 @@ void VideoPlayer::run()
                 printf("decode error.\n");
                 return;
             }
-
+            double iii = pFrame->pkt_duration;
+            iii = pFrame->pts * isteptime;
             if (got_picture) {
                 sws_scale(img_convert_ctx,
                         (uint8_t const * const *) pFrame->data,
@@ -160,7 +161,7 @@ void VideoPlayer::run()
                 //QImage tmpImg((uchar *)out_buffer, pCodecCtx->width, pCodecCtx->height, QImage::Format_BGR30);
                 
                 QImage image = tmpImg.copy(); //把图像复制一份 传递给界面显示
-                emit sig_GetOneFrame(image);  //发送信号
+                emit sig_GetOneFrame(image, iii);  //发送信号
                 //msleep(15);
 //                ///2017.8.11---lizhen
 //                //提取出图像中的R数据

@@ -19,8 +19,8 @@ public:
     void startPlay();
 
 signals:
-    void sig_GetOneFrame(QImage); //每获取到一帧图像 就发送此信号
-    void sig_GetOneFramewh(int, int);
+    void sig_GetOneFrame(QImage, double); //每获取到一帧图像 就发送此信号
+    void sig_GetOneFramewh(int, int, double);
     void sig_GetRFrame(QImage);   ///2017.8.11---lizhen
 
 protected:
